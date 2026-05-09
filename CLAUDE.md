@@ -36,6 +36,7 @@ fly logs
 ## Architecture
 
 - `app.py` — Flask application entry point; all routes live here.
+- `templates/index.html` — SaaS landing page; single-file HTML/CSS/JS, no build step.
 - `Dockerfile` — Multi-stage-free slim Python image; gunicorn serves on port 8080.
 - `fly.toml` — Fly.io config: `sin` (Singapore) primary region, `shared-cpu-1x` / 256 MB VM, scale-to-zero enabled.
 
@@ -49,7 +50,7 @@ The health check endpoint (`GET /health`) returns `{"status": "ok"}` and is used
 
 ## Skills
 
-Development skills are in `.superpowers/skills/`. Before starting any task that matches a skill name, read its `SKILL.md` first. Available skills:
+Skills are in `.claude/skills/`. Before starting any task that matches a skill name, read its `SKILL.md` first. Available skills:
 
 - `brainstorming` — refine ideas before writing code
 - `writing-plans` / `executing-plans` — break work into small tasks and execute them
@@ -60,6 +61,7 @@ Development skills are in `.superpowers/skills/`. Before starting any task that 
 - `using-git-worktrees` — isolated branches for parallel work
 - `dispatching-parallel-agents` / `subagent-driven-development` — multi-agent patterns
 - `finishing-a-development-branch` — merge and cleanup process
+- `frontend-design` — distinctive, production-grade UI with strong aesthetic direction
 
 ## Keeping CLAUDE.md current
 
