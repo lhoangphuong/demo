@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NULLBYTE — Infrastructure for builders who ship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #050508;
+  --surface: #0a0a12;
+  --accent:  #00ff88;
+  --blue:    #0af;
+  --red:     #ff2d6b;
+  --text:    #b8b8cc;
+  --dim:     #4a4a60;
+  --border:  rgba(0,255,136,.1);
+  --border2: rgba(0,255,136,.18);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{cursor:none;scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  line-height:1.75;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,136,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,136,.028) 1px,transparent 1px);
+  background-size:44px 44px;
+  pointer-events:none;z-index:0;
+}
+
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;
+}
+
+.scanline{
+  position:fixed;left:0;right:0;height:3px;top:-3px;
+  background:linear-gradient(90deg,transparent 0%,rgba(0,255,136,.12) 50%,transparent 100%);
+  animation:scan 7s linear infinite;
+  pointer-events:none;z-index:200;
+}
+@keyframes scan{from{top:-3px}to{top:100vh}}
+
+#cur-dot{
+  position:fixed;width:12px;height:12px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s;
+  mix-blend-mode:screen;
+}
+#cur-ring{
+  position:fixed;width:38px;height:38px;
+  border:1.5px solid rgba(0,255,136,.55);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,border-color .2s;
+}
+body.hov #cur-dot{width:18px;height:18px}
+body.hov #cur-ring{width:54px;height:54px;border-color:var(--accent)}
+
+.z2{position:relative;z-index:2}
+.container{max-width:1180px;margin:0 auto;padding:0 36px}
+.tag{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,62px);color:#fff;letter-spacing:2px;line-height:.95;margin-bottom:14px}
+.sub{font-size:12px;color:var(--dim);line-height:1.85;max-width:460px;margin-bottom:60px}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:18px 0;
+  background:rgba(5,5,8,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+nav .inner{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:0 36px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:3px;text-decoration:none}
+.logo em{color:var(--accent);font-style:normal}
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 26px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:1px;cursor:none;transition:all .2s}
+.btn-g{background:var(--accent);color:#000;font-weight:700;border:1px solid var(--accent)}
+.btn-g:hover{background:transparent;color:var(--accent);box-shadow:0 0 24px rgba(0,255,136,.25)}
+.btn-o{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.13)}
+.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.btn-full{width:100%;justify-content:center}
+
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 90px}
+.hero .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:6px 14px;border-radius:1px;margin-bottom:26px}
+.hero-badge span{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,9vw,118px);line-height:.88;letter-spacing:2px;color:#fff;margin-bottom:28px}
+h1 .g{color:var(--accent)}
+h1 .d{color:var(--dim)}
+.hero-copy{font-size:13px;color:var(--dim);max-width:430px;line-height:1.85;margin-bottom:38px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+
+.terminal{background:var(--surface);border:1px solid rgba(0,255,136,.14);border-radius:3px;overflow:hidden;box-shadow:0 0 80px rgba(0,255,136,.04),0 40px 80px rgba(0,0,0,.5)}
+.t-bar{display:flex;align-items:center;gap:7px;padding:11px 16px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.04)}
+.td{width:10px;height:10px;border-radius:50%}
+.td-r{background:#ff2d6b}.td-y{background:#ffb800}.td-g{background:var(--accent)}
+.t-title{font-size:10px;color:var(--dim);margin:0 auto;letter-spacing:.5px}
+.t-body{padding:22px 24px;min-height:310px;font-size:12px;line-height:1.9}
+
+.tl{display:block;white-space:nowrap;overflow:hidden;width:0;opacity:0}
+.tl.show{animation:typeout .55s steps(60,end) forwards}
+@keyframes typeout{from{width:0;opacity:1}to{width:100%;opacity:1}}
+
+.tp{color:var(--accent)}
+.to{color:var(--dim)}
+.ts{color:var(--accent)}
+.te{color:var(--red)}
+.ti{color:var(--blue)}
+.tc{display:inline-block;width:8px;height:13px;background:var(--accent);vertical-align:middle;margin-left:1px;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.metrics{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:52px 0;background:var(--surface)}
+.metrics .container{display:grid;grid-template-columns:repeat(4,1fr)}
+.metric{text-align:center;padding:28px 20px;border-right:1px solid var(--border)}
+.metric:last-child{border-right:none}
+.mv{font-family:'Bebas Neue',sans-serif;font-size:58px;letter-spacing:2px;color:var(--accent);line-height:1}
+.ml{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-top:8px}
+.ms{font-size:10px;color:var(--dim);opacity:.45;margin-top:3px}
+
+.features{padding:120px 0}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.fc{background:var(--bg);padding:36px 30px;position:relative;overflow:hidden;transition:background .3s}
+.fc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(0,255,136,.07) 0%,transparent 65%);opacity:0;transition:opacity .35s}
+.fc:hover{background:rgba(10,10,18,.9)}
+.fc:hover::before{opacity:1}
+.fc-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--dim);margin-bottom:18px}
+.fc-icon{font-size:26px;display:block;margin-bottom:14px;line-height:1}
+.fc-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px;margin-bottom:10px}
+.fc-desc{font-size:11px;color:var(--dim);line-height:1.85;margin-bottom:18px}
+.fc-tag{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:3px 10px;border-radius:1px}
+
+.code-sec{padding:120px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.code-sec .container{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.code-block{background:var(--bg);border:1px solid var(--border2);border-radius:3px;overflow:hidden}
+.cb-bar{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.04)}
+.cb-lang{font-size:10px;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase}
+.copy-btn{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);background:none;border:1px solid rgba(255,255,255,.1);padding:4px 12px;cursor:none;font-family:'JetBrains Mono',monospace;transition:all .2s}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cb-inner{padding:26px;font-size:12px;line-height:2;overflow-x:auto}
+.cb-inner pre{white-space:pre}
+.kw{color:var(--blue)}.fn{color:var(--accent)}.str{color:#ffb800}.cm{color:var(--dim);opacity:.55;font-style:italic}.num{color:var(--red)}.prop{color:#c792ea}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:13px}
+.feat-list li{display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--dim);line-height:1.6}
+.feat-list li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
+
+.pricing{padding:120px 0}
+.p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.pc{background:var(--bg);padding:46px 34px;position:relative;transition:background .3s}
+.pc:hover:not(.pc-feat){background:rgba(10,10,18,.8)}
+.pc-feat{background:var(--surface);box-shadow:inset 1px 0 0 var(--border2),inset -1px 0 0 var(--border2)}
+.pc-badge{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#000;background:var(--accent);padding:3px 11px;border-radius:1px;margin-bottom:22px}
+.pc-tier{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.pc-price{font-family:'Bebas Neue',sans-serif;font-size:66px;color:#fff;letter-spacing:2px;line-height:1;margin-bottom:3px}
+.pc-price sup{font-size:26px;vertical-align:top;margin-top:12px}
+.pc-period{font-size:10px;color:var(--dim);margin-bottom:28px}
+.p-div{height:1px;background:var(--border);margin:28px 0}
+.p-feats{list-style:none;display:flex;flex-direction:column;gap:13px;margin-bottom:34px}
+.p-feats li{display:flex;align-items:flex-start;gap:9px;font-size:11px;color:var(--dim);line-height:1.5}
+.ck{color:var(--accent);flex-shrink:0}
+.cx{color:var(--dim);opacity:.28;flex-shrink:0}
+
+.cta{padding:160px 0;text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(0,255,136,.07) 0%,transparent 68%);pointer-events:none}
+.cta h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,106px);color:#fff;letter-spacing:3px;line-height:.9;margin-bottom:26px}
+.cta h2 em{color:var(--accent);font-style:normal}
+.cta p{font-size:13px;color:var(--dim);max-width:440px;margin:0 auto 46px;line-height:1.85}
+.cta-row{display:flex;gap:14px;justify-content:center}
+
+footer{border-top:1px solid var(--border);padding:28px 0;background:var(--surface)}
+footer .inner{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:0 36px}
+.f-copy{font-size:10px;color:var(--dim)}
+.f-links{display:flex;gap:26px;list-style:none}
+.f-links a{font-size:10px;color:var(--dim);text-decoration:none;letter-spacing:.5px;transition:color .2s}
+.f-links a:hover{color:var(--accent)}
+.f-status{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--accent)}
+.f-status::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2.5s infinite}
+</style>
+</head>
+<body>
+
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+<div class="scanline"></div>
+
+<nav class="z2">
+  <div class="inner">
+    <a href="#" class="logo">NULL<em>BYTE</em></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#code">Docs</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <a href="#" class="btn btn-g">$ get_access</a>
+  </div>
+</nav>
+
+<section class="hero z2">
+  <div class="container">
+    <div>
+      <div class="hero-badge"><span></span>v2.4.0 — public beta live</div>
+      <h1>BUILD<br><span class="g">FASTER.</span><br><span class="d">SHIP MORE.</span></h1>
+      <p class="hero-copy">Infrastructure that gets out of your way. Sub-millisecond edge execution, zero-config deploys, and observability that speaks in logs — not dashboards.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn btn-g">$ start_free</a>
+        <a href="#" class="btn btn-o">→ read_docs</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="t-bar">
+        <div class="td td-r"></div>
+        <div class="td td-y"></div>
+        <div class="td td-g"></div>
+        <span class="t-title">nullbyte — zsh — 80×24</span>
+      </div>
+      <div class="t-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<section class="metrics z2">
+  <div class="container">
+    <div class="metric">
+      <div class="mv">0.8<small style="font-size:36px">ms</small></div>
+      <div class="ml">Avg. Latency</div>
+      <div class="ms">p99 &lt; 2.1ms</div>
+    </div>
+    <div class="metric">
+      <div class="mv">99.99<small style="font-size:36px">%</small></div>
+      <div class="ml">Uptime SLA</div>
+      <div class="ms">12-month rolling</div>
+    </div>
+    <div class="metric">
+      <div class="mv">4.2<small style="font-size:36px">B</small></div>
+      <div class="ml">Requests / day</div>
+      <div class="ms">and climbing</div>
+    </div>
+    <div class="metric">
+      <div class="mv">12K<small style="font-size:36px">+</small></div>
+      <div class="ml">Teams</div>
+      <div class="ms">89 countries</div>
+    </div>
+  </div>
+</section>
+
+<section class="features z2" id="features">
+  <div class="container">
+    <div class="tag">// capabilities</div>
+    <div class="h2">BUILT FOR<br>ENGINEERS</div>
+    <p class="sub">No dashboards designed by product managers. Clean primitives and APIs that behave exactly as documented.</p>
+    <div class="feat-grid">
+      <div class="fc"><div class="fc-num">01 ──</div><span class="fc-icon">⚡</span><div class="fc-title">Edge Execution</div><p class="fc-desc">Run compute at 300+ edge locations globally. Cold starts under 5ms. Your users never notice the difference.</p><span class="fc-tag">compute</span></div>
+      <div class="fc"><div class="fc-num">02 ──</div><span class="fc-icon">🔐</span><div class="fc-title">Zero-Trust Auth</div><p class="fc-desc">mTLS everywhere. Token rotation on the fly. Secrets never touch your codebase or your logs.</p><span class="fc-tag">security</span></div>
+      <div class="fc"><div class="fc-num">03 ──</div><span class="fc-icon">📡</span><div class="fc-title">Real-time Streams</div><p class="fc-desc">WebSocket and SSE primitives baked in. Fan-out to millions of subscribers without batching hacks.</p><span class="fc-tag">streaming</span></div>
+      <div class="fc"><div class="fc-num">04 ──</div><span class="fc-icon">🧠</span><div class="fc-title">Predictive Scaling</div><p class="fc-desc">Traffic spikes detected 90 seconds before they hit. Scale proactively, not reactively.</p><span class="fc-tag">infra</span></div>
+      <div class="fc"><div class="fc-num">05 ──</div><span class="fc-icon">🔭</span><div class="fc-title">Deep Observability</div><p class="fc-desc">Distributed traces, structured logs, and anomaly detection. No more grepping production.</p><span class="fc-tag">monitoring</span></div>
+      <div class="fc"><div class="fc-num">06 ──</div><span class="fc-icon">🔄</span><div class="fc-title">Atomic Deploys</div><p class="fc-desc">Blue-green, canary, rollback in one command. Your pipeline just got three steps shorter.</p><span class="fc-tag">deployment</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="code-sec z2" id="code">
+  <div class="container">
+    <div class="code-block">
+      <div class="cb-bar">
+        <span class="cb-lang">typescript</span>
+        <button class="copy-btn" id="copyBtn">copy</button>
+      </div>
+      <div class="cb-inner"><pre id="codeSnippet"><code><span class="cm">// Initialize the NullByte client</span>
+<span class="kw">import</span> { <span class="fn">NullByte</span> } <span class="kw">from</span> <span class="str">'@nullbyte/sdk'</span>
+
+<span class="kw">const</span> <span class="prop">nb</span> = <span class="kw">new</span> <span class="fn">NullByte</span>({
+  apiKey: <span class="prop">process</span>.env.<span class="prop">NB_API_KEY</span>,
+  region: <span class="str">'auto'</span>,
+  timeout: <span class="num">1000</span>,
+})
+
+<span class="cm">// Deploy a function to the edge</span>
+<span class="kw">const</span> <span class="prop">fn</span> = <span class="kw">await</span> <span class="prop">nb</span>.<span class="fn">deploy</span>({
+  name: <span class="str">'process-webhook'</span>,
+  runtime: <span class="str">'node20'</span>,
+  handler: <span class="kw">async</span> (<span class="prop">req</span>, <span class="prop">ctx</span>) => {
+    <span class="kw">const</span> <span class="prop">body</span> = <span class="kw">await</span> <span class="prop">req</span>.<span class="fn">json</span>()
+    <span class="kw">await</span> <span class="prop">ctx</span>.<span class="fn">store</span>.<span class="fn">put</span>(<span class="prop">body</span>.<span class="prop">id</span>, <span class="prop">body</span>)
+    <span class="kw">return</span> { <span class="prop">ok</span>: <span class="kw">true</span>, <span class="prop">ts</span>: <span class="prop">Date</span>.<span class="fn">now</span>() }
+  },
+})
+
+<span class="prop">console</span>.<span class="fn">log</span>(<span class="prop">fn</span>.<span class="prop">url</span>)
+<span class="cm">// → https://edge.nullbyte.io/fn/a7x9k</span></code></pre></div>
+    </div>
+    <div>
+      <div class="tag">// integration</div>
+      <div class="h2">FIVE LINES<br>TO PRODUCTION</div>
+      <p style="font-size:12px;color:var(--dim);line-height:1.85;margin-bottom:30px">The SDK handles auth, retries, circuit breaking, and telemetry automatically. You write the business logic. We handle the rest.</p>
+      <ul class="feat-list">
+        <li>Auto-generated TypeScript types from your schema</li>
+        <li>Retry logic with exponential backoff built in</li>
+        <li>OpenTelemetry traces without any configuration</li>
+        <li>Works with any framework — or no framework at all</li>
+        <li>npm, deno, bun — your runtime, your choice</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="pricing z2" id="pricing">
+  <div class="container">
+    <div class="tag">// pricing</div>
+    <div class="h2">TRANSPARENT.<br>PREDICTABLE.</div>
+    <p class="sub">No egress fees. No surprise invoices. Cancel anytime, no questions asked.</p>
+    <div class="p-grid">
+      <div class="pc">
+        <div class="pc-tier">Free</div>
+        <div class="pc-price">$0</div>
+        <div class="pc-period">forever · no credit card</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> 100k requests / month</li>
+          <li><span class="ck">✓</span> 3 edge regions</li>
+          <li><span class="ck">✓</span> 1 GB storage</li>
+          <li><span class="ck">✓</span> Community support</li>
+          <li><span class="cx">✗</span> Custom domains</li>
+          <li><span class="cx">✗</span> SLA guarantee</li>
+          <li><span class="cx">✗</span> Team seats</li>
+        </ul>
+        <a href="#" class="btn btn-o btn-full">$ start_free</a>
+      </div>
+      <div class="pc pc-feat">
+        <div class="pc-badge">most popular</div>
+        <div class="pc-tier">Scale</div>
+        <div class="pc-price"><sup>$</sup>79</div>
+        <div class="pc-period">/ month · billed annually</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> 50M requests / month</li>
+          <li><span class="ck">✓</span> 300+ edge regions</li>
+          <li><span class="ck">✓</span> 500 GB storage</li>
+          <li><span class="ck">✓</span> Priority support</li>
+          <li><span class="ck">✓</span> Custom domains</li>
+          <li><span class="ck">✓</span> 99.99% SLA</li>
+          <li><span class="ck">✓</span> 10 team seats</li>
+        </ul>
+        <a href="#" class="btn btn-g btn-full" style="box-shadow:0 0 28px rgba(0,255,136,.2)">$ deploy_now</a>
+      </div>
+      <div class="pc">
+        <div class="pc-tier">Enterprise</div>
+        <div class="pc-price" style="font-size:52px;padding-top:7px">Talk<br>to us</div>
+        <div class="pc-period">custom pricing</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Unlimited requests</li>
+          <li><span class="ck">✓</span> Private edge clusters</li>
+          <li><span class="ck">✓</span> Unlimited storage</li>
+          <li><span class="ck">✓</span> Dedicated SRE support</li>
+          <li><span class="ck">✓</span> Custom contracts &amp; MSA</li>
+          <li><span class="ck">✓</span> 99.999% SLA</li>
+          <li><span class="ck">✓</span> Unlimited seats</li>
+        </ul>
+        <a href="#" class="btn btn-o btn-full">$ contact_sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta z2">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <h2>STOP WAITING.<br><em>START BUILDING.</em></h2>
+    <p>Join 12,000+ engineering teams already shipping faster with NullByte.</p>
+    <div class="cta-row">
+      <a href="#" class="btn btn-g">$ get_started_free</a>
+      <a href="#" class="btn btn-o">→ book_a_demo</a>
+    </div>
+  </div>
+</section>
+
+<footer class="z2">
+  <div class="inner">
+    <span class="f-copy">© 2025 NullByte, Inc. All rights reserved.</span>
+    <ul class="f-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Security</a></li>
+      <li><a href="#">Status</a></li>
+    </ul>
+    <span class="f-status">All systems operational</span>
+  </div>
+</footer>
+
+<script>
+const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))});
+
+const lines=[
+  {t:'$ nullbyte init --project=myapp',c:'tp',d:0},
+  {t:'  Connecting to edge network...',c:'to',d:550},
+  {t:'  ✓  Regions: sin1 lax1 fra1 nrt1',c:'ts',d:1100},
+  {t:'  ✓  Credentials provisioned',c:'ts',d:1650},
+  {t:'  ✓  Project ready',c:'ts',d:2100},
+  {t:'',c:'to',d:2500},
+  {t:'$ nullbyte deploy --env=production',c:'tp',d:2900},
+  {t:'  Building... (node20, 812ms)',c:'to',d:3500},
+  {t:'  Pushing to 312 edge nodes...',c:'ti',d:4200},
+  {t:'  ✓  Live at edge.nullbyte.io/myapp',c:'ts',d:5000},
+  {t:'',c:'to',d:5400},
+  {t:'$ _',c:'tp',d:5700},
+];
+const tbody=document.getElementById('termBody');
+lines.forEach((l,i)=>{
+  setTimeout(()=>{
+    const s=document.createElement('span');s.className='tl';
+    s.innerHTML=`<span class="${l.c}">${l.t}</span>`;
+    if(i===lines.length-1)s.innerHTML+=`<span class="tc"></span>`;
+    tbody.appendChild(s);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('show')));
+    tbody.scrollTop=tbody.scrollHeight;
+  },l.d);
+});
+
+document.getElementById('copyBtn').addEventListener('click',function(){
+  navigator.clipboard.writeText(document.getElementById('codeSnippet').innerText).then(()=>{
+    this.textContent='copied!';this.style.cssText='color:var(--accent);border-color:var(--accent)';
+    setTimeout(()=>{this.textContent='copy';this.style.cssText=''},2200);
+  });
+});
+</script>
+</body>
+</html>
