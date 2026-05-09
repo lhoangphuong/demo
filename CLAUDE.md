@@ -47,6 +47,20 @@ The health check endpoint (`GET /health`) returns `{"status": "ok"}` and is used
 - The app name in `fly.toml` is `demo-8xqghg`. The live URL is `https://demo-8xqghg.fly.dev`.
 - `auto_stop_machines = "stop"` and `min_machines_running = 0` enable scale-to-zero for cost savings.
 
+## Skills
+
+Development skills are in `.superpowers/skills/`. Before starting any task that matches a skill name, read its `SKILL.md` first. Available skills:
+
+- `brainstorming` — refine ideas before writing code
+- `writing-plans` / `executing-plans` — break work into small tasks and execute them
+- `test-driven-development` — RED-GREEN-REFACTOR cycle
+- `systematic-debugging` — structured approach to finding bugs
+- `requesting-code-review` / `receiving-code-review` — code review workflow
+- `verification-before-completion` — checks before marking a task done
+- `using-git-worktrees` — isolated branches for parallel work
+- `dispatching-parallel-agents` / `subagent-driven-development` — multi-agent patterns
+- `finishing-a-development-branch` — merge and cleanup process
+
 ## Keeping CLAUDE.md current
 
 Update this file whenever you make a change that affects how someone would develop or deploy this project:
