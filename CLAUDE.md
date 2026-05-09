@@ -44,5 +44,16 @@ The health check endpoint (`GET /health`) returns `{"status": "ok"}` and is used
 ## Fly.io conventions
 
 - Internal port is **8080**; Fly terminates TLS externally (`force_https = true`).
-- The app name in `fly.toml` (`app = "demo"`) must match the app created in your Fly.io account — rename it before the first `fly launch`.
+- The app name in `fly.toml` is `demo-8xqghg`. The live URL is `https://demo-8xqghg.fly.dev`.
 - `auto_stop_machines = "stop"` and `min_machines_running = 0` enable scale-to-zero for cost savings.
+
+## Keeping CLAUDE.md current
+
+Update this file whenever you make a change that affects how someone would develop or deploy this project:
+
+- New routes, services, or modules added to `app.py` — update **Architecture**
+- Changes to port, region, VM size, or scaling in `fly.toml` — update **Fly.io conventions**
+- New dependencies or changed run commands — update **Commands**
+- Changes to the GitHub Actions workflow (new secrets, triggers, steps) — add a **CI/CD** section
+
+Do this in the same commit as the code change, not as a follow-up.
