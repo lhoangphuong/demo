@@ -13,6 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Record start time
+        id: timer
+        run: echo "start=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Notify Slack (start)
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text": ":hourglass_flowing_sand: *demo* deploy started."}'
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy
@@ -23,13 +33,15 @@ jobs:
       - name: Notify Slack (success)
         if: success()
         run: |
+          duration=$(( $(date +%s) - ${{ steps.timer.outputs.start }} ))
           curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -d '{"text": ":rocket: *demo* deployed successfully to Fly.io."}'
+            -d "{\"text\": \":rocket: *demo* deployed successfully in ${duration}s.\n<https://demo-8xqghg.fly.dev|https://demo-8xqghg.fly.dev>\"}"
 
       - name: Notify Slack (failure)
         if: failure()
         run: |
+          duration=$(( $(date +%s) - ${{ steps.timer.outputs.start }} ))
           curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -d '{"text": ":x: *demo* deployment to Fly.io *failed*."}'
+            -d "{\"text\": \":x: *demo* deployment failed after ${duration}s.\"}"
