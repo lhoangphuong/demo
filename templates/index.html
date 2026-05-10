@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NULLBYTE — Infrastructure for builders who ship</title>
+<title>🔥 NULLBYTE — Infrastructure for builders who ship</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #050508;
-  --surface: #0a0a12;
-  --accent:  #00ff88;
-  --blue:    #0af;
-  --red:     #ff2d6b;
-  --text:    #b8b8cc;
-  --dim:     #4a4a60;
-  --border:  rgba(0,255,136,.1);
-  --border2: rgba(0,255,136,.18);
+  --bg:      #0a0506;
+  --surface: #120a08;
+  --accent:  #ff6b1a;
+  --blue:    #ff9f4a;
+  --red:     #ff3d1a;
+  --text:    #ffcca8;
+  --dim:     #9a6a50;
+  --border:  rgba(255,107,26,.15);
+  --border2: rgba(255,107,26,.25);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -34,8 +34,8 @@ body::before{
   content:'';
   position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(0,255,136,.028) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,136,.028) 1px,transparent 1px);
+    linear-gradient(rgba(255,107,26,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,26,.04) 1px,transparent 1px);
   background-size:44px 44px;
   pointer-events:none;z-index:0;
 }
@@ -49,7 +49,7 @@ body::after{
 
 .scanline{
   position:fixed;left:0;right:0;height:3px;top:-3px;
-  background:linear-gradient(90deg,transparent 0%,rgba(0,255,136,.12) 50%,transparent 100%);
+  background:linear-gradient(90deg,transparent 0%,rgba(255,107,26,.18) 50%,transparent 100%);
   animation:scan 7s linear infinite;
   pointer-events:none;z-index:200;
 }
@@ -65,7 +65,7 @@ body::after{
 }
 #cur-ring{
   position:fixed;width:38px;height:38px;
-  border:1.5px solid rgba(0,255,136,.55);border-radius:50%;
+  border:1.5px solid rgba(255,107,26,.65);border-radius:50%;
   pointer-events:none;z-index:9998;
   transform:translate(-50%,-50%);
   transition:width .2s,height .2s,border-color .2s;
@@ -97,14 +97,14 @@ nav .inner{display:flex;align-items:center;justify-content:space-between;max-wid
 
 .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 26px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-radius:1px;cursor:none;transition:all .2s}
 .btn-g{background:var(--accent);color:#000;font-weight:700;border:1px solid var(--accent)}
-.btn-g:hover{background:transparent;color:var(--accent);box-shadow:0 0 24px rgba(0,255,136,.25)}
+.btn-g:hover{background:transparent;color:var(--accent);box-shadow:0 0 24px rgba(255,107,26,.35)}
 .btn-o{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.13)}
 .btn-o:hover{border-color:var(--accent);color:var(--accent)}
 .btn-full{width:100%;justify-content:center}
 
 .hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 90px}
 .hero .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:6px 14px;border-radius:1px;margin-bottom:26px}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(255,107,26,.3);padding:6px 14px;border-radius:1px;margin-bottom:26px}
 .hero-badge span{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,9vw,118px);line-height:.88;letter-spacing:2px;color:#fff;margin-bottom:28px}
 h1 .g{color:var(--accent)}
@@ -112,7 +112,7 @@ h1 .d{color:var(--dim)}
 .hero-copy{font-size:13px;color:var(--dim);max-width:430px;line-height:1.85;margin-bottom:38px}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
 
-.terminal{background:var(--surface);border:1px solid rgba(0,255,136,.14);border-radius:3px;overflow:hidden;box-shadow:0 0 80px rgba(0,255,136,.04),0 40px 80px rgba(0,0,0,.5)}
+.terminal{background:var(--surface);border:1px solid rgba(255,107,26,.2);border-radius:3px;overflow:hidden;box-shadow:0 0 80px rgba(255,107,26,.08),0 40px 80px rgba(0,0,0,.5)}
 .t-bar{display:flex;align-items:center;gap:7px;padding:11px 16px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.04)}
 .td{width:10px;height:10px;border-radius:50%}
 .td-r{background:#ff2d6b}.td-y{background:#ffb800}.td-g{background:var(--accent)}
@@ -142,18 +142,18 @@ h1 .d{color:var(--dim)}
 .features{padding:120px 0}
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
 .fc{background:var(--bg);padding:36px 30px;position:relative;overflow:hidden;transition:background .3s}
-.fc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(0,255,136,.07) 0%,transparent 65%);opacity:0;transition:opacity .35s}
+.fc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -20%,rgba(255,107,26,.12) 0%,transparent 65%);opacity:0;transition:opacity .35s}
 .fc:hover{background:rgba(10,10,18,.9)}
 .fc:hover::before{opacity:1}
 .fc-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--dim);margin-bottom:18px}
 .fc-icon{font-size:26px;display:block;margin-bottom:14px;line-height:1}
 .fc-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px;margin-bottom:10px}
 .fc-desc{font-size:11px;color:var(--dim);line-height:1.85;margin-bottom:18px}
-.fc-tag{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,255,136,.2);padding:3px 10px;border-radius:1px}
+.fc-tag{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(255,107,26,.3);padding:3px 10px;border-radius:1px}
 
 .code-sec{padding:120px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .code-sec .container{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.code-block{background:var(--bg);border:1px solid var(--border2);border-radius:3px;overflow:hidden}
+.code-block{background:var(--bg);border:1px solid var(--border2);border-radius:3px;overflow:hidden;box-shadow:0 0 40px rgba(255,107,26,.06)}
 .cb-bar{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.04)}
 .cb-lang{font-size:10px;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase}
 .copy-btn{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);background:none;border:1px solid rgba(255,255,255,.1);padding:4px 12px;cursor:none;font-family:'JetBrains Mono',monospace;transition:all .2s}
@@ -168,7 +168,7 @@ h1 .d{color:var(--dim)}
 .video-sec{padding:120px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:8px}
 .video-card{background:var(--bg);border:1px solid var(--border2);border-radius:3px;padding:24px 22px 22px;display:flex;flex-direction:column;gap:12px;transition:border-color .25s,box-shadow .25s}
-.video-card:hover{border-color:rgba(0,255,136,.28);box-shadow:0 0 40px rgba(0,255,136,.06)}
+.video-card:hover{border-color:rgba(255,107,26,.4);box-shadow:0 0 40px rgba(255,107,26,.12)}
 .video-title{font-size:13px;font-weight:700;color:#fff;letter-spacing:.5px;line-height:1.35}
 .video-desc{font-size:11px;color:var(--dim);line-height:1.65;margin:0}
 .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:2px;background:#000;border:1px solid rgba(255,255,255,.06)}
@@ -191,7 +191,7 @@ h1 .d{color:var(--dim)}
 .cx{color:var(--dim);opacity:.28;flex-shrink:0}
 
 .cta{padding:160px 0;text-align:center;position:relative;overflow:hidden}
-.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(0,255,136,.07) 0%,transparent 68%);pointer-events:none}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(255,107,26,.15) 0%,rgba(255,61,26,.08) 40%,transparent 68%);pointer-events:none}
 .cta h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,106px);color:#fff;letter-spacing:3px;line-height:.9;margin-bottom:26px}
 .cta h2 em{color:var(--accent);font-style:normal}
 .cta p{font-size:13px;color:var(--dim);max-width:440px;margin:0 auto 46px;line-height:1.85}
@@ -276,8 +276,8 @@ footer .inner{display:flex;align-items:center;justify-content:space-between;max-
 <section class="hero z2">
   <div class="container">
     <div>
-      <div class="hero-badge"><span></span>v2.4.0 — public beta live</div>
-      <h1>BUILD<br><span class="g">FASTER.</span><br><span class="d">SHIP MORE.</span></h1>
+      <div class="hero-badge"><span></span>v2.4.0 — public beta live 🔥</div>
+      <h1>BUILD<br><span class="g">FASTER. 🔥</span><br><span class="d">SHIP MORE.</span></h1>
       <p class="hero-copy">Infrastructure that gets out of your way. Sub-millisecond edge execution, zero-config deploys, and observability that speaks in logs — not dashboards.</p>
       <div class="hero-ctas">
         <a href="#" class="btn btn-g">$ start_free</a>
@@ -327,7 +327,7 @@ footer .inner{display:flex;align-items:center;justify-content:space-between;max-
     <div class="h2">BUILT FOR<br>ENGINEERS</div>
     <p class="sub">No dashboards designed by product managers. Clean primitives and APIs that behave exactly as documented.</p>
     <div class="feat-grid">
-      <div class="fc"><div class="fc-num">01 ──</div><span class="fc-icon">⚡</span><div class="fc-title">Edge Execution</div><p class="fc-desc">Run compute at 300+ edge locations globally. Cold starts under 5ms. Your users never notice the difference.</p><span class="fc-tag">compute</span></div>
+      <div class="fc"><div class="fc-num">01 ──</div><span class="fc-icon">🔥</span><div class="fc-title">Edge Execution</div><p class="fc-desc">Run compute at 300+ edge locations globally. Cold starts under 5ms. Your users never notice the difference.</p><span class="fc-tag">compute</span></div>
       <div class="fc"><div class="fc-num">02 ──</div><span class="fc-icon">🔐</span><div class="fc-title">Zero-Trust Auth</div><p class="fc-desc">mTLS everywhere. Token rotation on the fly. Secrets never touch your codebase or your logs.</p><span class="fc-tag">security</span></div>
       <div class="fc"><div class="fc-num">03 ──</div><span class="fc-icon">📡</span><div class="fc-title">Real-time Streams</div><p class="fc-desc">WebSocket and SSE primitives baked in. Fan-out to millions of subscribers without batching hacks.</p><span class="fc-tag">streaming</span></div>
       <div class="fc"><div class="fc-num">04 ──</div><span class="fc-icon">🧠</span><div class="fc-title">Predictive Scaling</div><p class="fc-desc">Traffic spikes detected 90 seconds before they hit. Scale proactively, not reactively.</p><span class="fc-tag">infra</span></div>
@@ -450,7 +450,7 @@ footer .inner{display:flex;align-items:center;justify-content:space-between;max-
           <li><span class="ck">✓</span> 99.99% SLA</li>
           <li><span class="ck">✓</span> 10 team seats</li>
         </ul>
-        <a href="#" class="btn btn-g btn-full" style="box-shadow:0 0 28px rgba(0,255,136,.2)">$ deploy_now</a>
+        <a href="#" class="btn btn-g btn-full" style="box-shadow:0 0 28px rgba(255,107,26,.3)">$ deploy_now</a>
       </div>
       <div class="pc">
         <div class="pc-tier">Enterprise</div>
@@ -475,7 +475,7 @@ footer .inner{display:flex;align-items:center;justify-content:space-between;max-
 <section class="cta z2">
   <div class="cta-glow"></div>
   <div class="container">
-    <h2>STOP WAITING.<br><em>START BUILDING.</em></h2>
+    <h2>STOP WAITING. 🔥<br><em>START BUILDING.</em></h2>
     <p>Join 12,000+ engineering teams already shipping faster with NullByte.</p>
     <div class="cta-row">
       <a href="#" class="btn btn-g">$ get_started_free</a>
